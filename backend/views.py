@@ -37,7 +37,7 @@ class HomeView(FormView):
         )
         result = json.loads(res.content.decode('utf8'))
         return redirect(
-            reverse('ShowImageView', kwargs={'cid': result['Hash']}) + f'?filename={result["Name"]}'
+            reverse('ShowImageView', kwargs={'cid': result['Hash']})
         )
 
 
@@ -46,13 +46,25 @@ class ShowImageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         cid = kwargs.get("cid")
-        filename = self.request.GET.get('filename', None)
         file_url = f'{settings.IPFS_GATEWAY}/ipfs/{cid}'
         res = httpx.get(file_url, timeout=60)
 
         context = super().get_context_data(**kwargs)
         context['file_url'] = file_url
         context['content_type'] = res.headers.get('Content-Type')
+
+        filename = 'share'
+        if context['content_type'] == 'image/jpeg':
+            filename += '.jpg'
+        elif context['content_type'] == 'image/gif':
+            filename += '.gif'
+        elif context['content_type'] == 'image/png':
+            filename += '.png'
+        elif context['content_type'] == 'image/webp':
+            filename += '.webp'
+        else:
+            filename = None
+
         if filename is None:
             context['imgurl'] = None
         else:
