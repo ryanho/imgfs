@@ -1,26 +1,35 @@
 {% extends 'backend/base.html' %}
 
-{% block content %}
-    <div class="py-1 bg-light">
-        <div class="container">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                <div class="col">
-                  <div class="card shadow-sm">
-                    <img src="{{ file_url }}" class="img-fluid" alt="">
+{% block meta %}
+    <meta property="og:title" content="ImgFS" />
+    <meta property="og:image" content="{{ file_url }}" />
+    <meta property="og:image:type" content="{{ content_type }}" />
+{% endblock %}
 
-                    <div class="card-body">
-                      <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                      <div class="d-flex justify-content-between align-items-center">
-{#                        <div class="btn-group">#}
-{#                          <button type="button" class="btn btn-sm btn-outline-secondary">View</button>#}
-{#                          <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>#}
-{#                        </div>#}
-                        <small class="text-muted">9 mins</small>
-                      </div>
+{% block content %}
+            <div class="row g-5">
+                <div class="col-md-8">
+                    <img src="{{ file_url }}" class="img-fluid rounded mx-auto d-block" alt="">
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                    <ul class="nav flex-column">
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Page url</a>
+                      </li>
+                      <li class="nav-item">
+                        {% if imgurl is None %}
+                        <a class="nav-link disabled">Image url</a>
+                        {% else %}
+                        <a class="nav-link" href="{{ imgurl }}">Image url</a>
+                        {% endif %}
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled">Share to...</a>
+                      </li>
+                    </ul>
                     </div>
-                  </div>
                 </div>
             </div>
-        </div>
-    </div>
+
 {% endblock %}

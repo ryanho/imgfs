@@ -1,11 +1,18 @@
 {% extends 'backend/base.html' %}
 
 {% block content %}
-<div class="form">
-    <form method="post" enctype="multipart/form-data">
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light">Upload image</h1>
+        <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
-</div>
+        <div class="mb-3 py-2">
+          <input class="form-control" type="file" id="image_file" name="image_file" accept="image/jpeg,image/gif,image/png,image/webp">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </section>
 {% endblock %}

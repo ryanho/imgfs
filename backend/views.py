@@ -30,12 +30,18 @@ class ShowImageView(TemplateView):
     template_name = 'backend/show_image.html'
 
     def get_context_data(self, **kwargs):
-        file_url = f'https://cloudflare-ipfs.com/ipfs/{kwargs.get("cid")}'
+        cid = kwargs.get("cid")
+        filename = self.request.GET.get('filename', None)
+        file_url = f'https://cloudflare-ipfs.com/ipfs/{cid}'
         res = httpx.get(file_url, timeout=60)
 
         context = super().get_context_data(**kwargs)
         context['file_url'] = file_url
         context['content_type'] = res.headers.get('Content-Type')
+        if filename is None:
+            context['imgurl'] = None
+        else:
+            context['imgurl'] = reverse('GetImage', kwargs={'cid': cid, 'filename': filename})
         return context
 
 
