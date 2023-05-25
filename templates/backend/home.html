@@ -1,5 +1,9 @@
 {% extends 'backend/base.html' %}
 
+{% block head %}
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+{% endblock %}
+
 {% block content %}
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
@@ -8,8 +12,10 @@
         <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3 py-2">
-          <input class="form-control" type="file" id="image_file" name="image_file" accept="image/jpeg,image/gif,image/png,image/webp">
+            {{ form.image_file }}
         </div>
+        <div class="h-captcha" data-sitekey="{{ hcaptcha_sitekey }}"></div>
+        {{ form.errors }}
         <button type="submit" class="btn btn-primary">Submit</button>
         </form>
       </div>

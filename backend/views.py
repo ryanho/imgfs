@@ -12,6 +12,21 @@ class HomeView(FormView):
     template_name = 'backend/home.html'
     form_class = ImageUploadForm
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['hcaptcha_sitekey'] = settings.HCAPTCHA_SITEKEY
+        return context
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        if self.request.method == 'POST':
+            kwargs.update({
+                'data': {
+                    'hcaptcha': self.request.POST.get('h-captcha-response', None)
+                }
+            })
+        return kwargs
+
     def form_valid(self, form):
         url = f'{settings.IPFS_API}/api/v0/add'
         img_file = form.files['image_file']
@@ -32,7 +47,7 @@ class ShowImageView(TemplateView):
     def get_context_data(self, **kwargs):
         cid = kwargs.get("cid")
         filename = self.request.GET.get('filename', None)
-        file_url = f'https://cloudflare-ipfs.com/ipfs/{cid}'
+        file_url = f'{settings.IPFS_GATEWAY}/ipfs/{cid}'
         res = httpx.get(file_url, timeout=60)
 
         context = super().get_context_data(**kwargs)
@@ -48,7 +63,13 @@ class ShowImageView(TemplateView):
 def get_image(request, cid, filename):
     gateway = settings.IPFS_GATEWAY
     res = httpx.get(f'{gateway}/ipfs/{cid}?filename={filename}', timeout=60)
+
+    headers = {
+        'Cache-Control': res.headers.get('Cache-Control'),
+        'Etag': res.headers.get('Etag')
+    }
+
     if res.status_code == 200:
-        return HttpResponse(res.read(), content_type=res.headers.get('Content-Type'))
+        return HttpResponse(res.read(), content_type=res.headers.get('Content-Type'), headers=headers)
     else:
         return HttpResponse(res.content, status=res.status_code)
