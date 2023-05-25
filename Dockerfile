@@ -34,4 +34,4 @@ USER appuser
 
 # Run the application
 ENTRYPOINT ["python"]
-CMD ["manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["-m", "gunicorn", "-w4", "imgfs.wsgi", "-b", "0.0.0.0:8080"]
