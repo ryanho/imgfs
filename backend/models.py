@@ -1,5 +1,6 @@
 from django.db import models
 from customauth.models import User
+from django.utils import timezone
 
 # Create your models here.
 
@@ -11,7 +12,7 @@ class AbstractImageModel(models.Model):
     height = models.PositiveIntegerField(verbose_name='image height', null=True)
     size = models.PositiveIntegerField(verbose_name='file size', null=True)
     content_type = models.CharField(verbose_name='content type', max_length=1024)
-    created = models.DateTimeField(verbose_name='created date', auto_now_add=True)
+    created = models.DateTimeField(verbose_name='created date', default=timezone.now, editable=False)
 
     class Meta:
         abstract = True
