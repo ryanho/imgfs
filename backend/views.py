@@ -1,9 +1,12 @@
-from django.shortcuts import render, HttpResponse, redirect, reverse
+from django.shortcuts import render, HttpResponse, redirect, reverse, get_object_or_404
 from django.views.generic import TemplateView, FormView
 from django.conf import settings
 import httpx
 from .forms import ImageUploadForm
 import json
+from easy_thumbnails.files import Thumbnailer
+from .models import UploadImage, ThumbnailImage
+from customauth.models import User
 
 # Create your views here.
 
@@ -27,17 +30,46 @@ class HomeView(FormView):
             })
         return kwargs
 
-    def form_valid(self, form):
+    @staticmethod
+    def upload_file(img_file):
         url = f'{settings.IPFS_API}/api/v0/add'
-        img_file = form.files['image_file']
         files = {'file': (img_file.name, img_file.file)}
         res = httpx.post(
             url,
             files=files,
         )
         result = json.loads(res.content.decode('utf8'))
+        return result
+
+    def form_valid(self, form):
+        if self.request.user.is_authenticated:
+            user = self.request.user
+        else:
+            user = User.objects.get(username='ryan')
+
+        img_file = form.files['image_file']
+        thumbnailer = Thumbnailer(img_file)
+        thumbnail = thumbnailer.generate_thumbnail({'size': (300, 300), 'corp': True})
+
+        result = self.upload_file(img_file)
+        cid = result['Hash']
+
+        image = UploadImage(
+            user=user, cid=cid, filename=img_file.name, width=img_file.image.width,
+            height=img_file.image.height, size=result['Size'], content_type=img_file.image.get_format_mimetype()
+        )
+        image.save()
+
+        result = self.upload_file(thumbnail)
+
+        thumb_image = ThumbnailImage(
+            origin=image, cid=result['Hash'], filename=thumbnail.name, width=thumbnail.image.width,
+            height=thumbnail.image.height, size=result['Size'], content_type=img_file.image.get_format_mimetype()
+        )
+        thumb_image.save()
+
         return redirect(
-            reverse('ShowImageView', kwargs={'cid': result['Hash']})
+            reverse('ShowImageView', kwargs={'cid': cid})
         )
 
 
@@ -46,29 +78,11 @@ class ShowImageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         cid = kwargs.get("cid")
-        file_url = f'{settings.IPFS_GATEWAY}/ipfs/{cid}'
-        res = httpx.get(file_url, timeout=60)
+        image = get_object_or_404(UploadImage, cid=cid)
 
         context = super().get_context_data(**kwargs)
-        context['file_url'] = file_url
-        context['content_type'] = res.headers.get('Content-Type')
-
-        filename = 'share'
-        if context['content_type'] == 'image/jpeg':
-            filename += '.jpg'
-        elif context['content_type'] == 'image/gif':
-            filename += '.gif'
-        elif context['content_type'] == 'image/png':
-            filename += '.png'
-        elif context['content_type'] == 'image/webp':
-            filename += '.webp'
-        else:
-            filename = None
-
-        if filename is None:
-            context['imgurl'] = None
-        else:
-            context['imgurl'] = reverse('GetImage', kwargs={'cid': cid, 'filename': filename})
+        context['imgurl'] = reverse('GetImage', kwargs={'cid': cid, 'filename': image.filename})
+        context['file_url'] = f'{settings.IPFS_GATEWAY}/ipfs/{cid}'
         return context
 
 

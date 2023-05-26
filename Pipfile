@@ -9,6 +9,7 @@ django-debug-toolbar = "*"
 django-environ = "*"
 httpx = "*"
 gunicorn = "*"
+easy-thumbnails = "*"
 
 [dev-packages]
 

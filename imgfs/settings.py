@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'customauth',
     'backend',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
