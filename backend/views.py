@@ -45,7 +45,7 @@ class HomeView(FormView):
         if self.request.user.is_authenticated:
             user = self.request.user
         else:
-            user = User.objects.get(username='ryan')
+            user = None
 
         img_file = form.files['image_file']
         thumbnailer = Thumbnailer(img_file)
