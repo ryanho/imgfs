@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'customauth',
+    'backend',
 ]
 
 MIDDLEWARE = [
@@ -151,3 +153,5 @@ CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS')
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+AUTH_USER_MODEL = 'customauth.User'
