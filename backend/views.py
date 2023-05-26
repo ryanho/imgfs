@@ -83,6 +83,7 @@ class ShowImageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['imgurl'] = reverse('GetImage', kwargs={'cid': cid, 'filename': image.filename})
         context['file_url'] = f'{settings.IPFS_GATEWAY}/ipfs/{cid}'
+        context['content_type'] = image.content_type
         return context
 
 
