@@ -49,7 +49,7 @@ class HomeView(FormView):
 
         img_file = form.files['image_file']
         thumbnailer = Thumbnailer(img_file)
-        thumbnail = thumbnailer.generate_thumbnail({'size': (300, 300), 'corp': True})
+        thumbnail = thumbnailer.generate_thumbnail({'size': (540, 540), 'corp': True})
 
         result = self.upload_file(img_file)
         cid = result['Hash']
@@ -82,8 +82,8 @@ class ShowImageView(TemplateView):
 
         context = super().get_context_data(**kwargs)
         context['imgurl'] = reverse('GetImage', kwargs={'cid': cid, 'filename': image.filename})
-        context['file_url'] = f'{settings.IPFS_GATEWAY}/ipfs/{cid}'
-        context['content_type'] = image.content_type
+        context['file_url'] = f'{settings.IPFS_GATEWAY}/ipfs/{image.thumbnailimage.cid}'
+        context['image'] = image
         return context
 
 

@@ -2,15 +2,19 @@
 
 {% block meta %}
     <meta property="og:title" content="ImgFS" />
+    <meta property="og:type" content="website" />
     <meta property="og:image" content="{{ file_url }}" />
-    <meta property="og:image:type" content="{{ content_type }}" />
+    <meta property="og:image:width" content="{{ image.thumbnailimage.width }}" />
+    <meta property="og:image:height" content="{{ image.thumbnailimage.height }}" />
+    <meta property="og:image:type" content="{{ image.thumbnailimage.content_type }}" />
     <meta property="og:description" content="An online image sharing service using IPFS to store files." />
 {% endblock %}
 
 {% block content %}
             <div class="row g-5">
                 <div class="col-md-8">
-                    <img src="{{ file_url }}" class="img-fluid rounded mx-auto d-block" alt="">
+                    <img src="{{ file_url }}" class="img-fluid rounded mx-auto d-block" title="click to enlarge image" width="{{ image.thumbnailimage.width }}" height="{{ image.thumbnailimage.height }}"
+                    onclick="toggleModal()">
                 </div>
                 <div class="col-md-4">
                     <div class="card">
@@ -33,4 +37,20 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content">
+                        <img src="{{ imgurl }}" class="img-fluid" width="{{ image.width }}" height="{{ image.height }}">
+                    </div>
+                </div>
+            </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+    function toggleModal() {
+        const modal = new bootstrap.Modal('#imageModal')
+        modal.toggle()
+    }
+    </script>
 {% endblock %}
