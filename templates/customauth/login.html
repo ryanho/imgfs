@@ -1,12 +1,20 @@
 {% extends "backend/base.html" %}
 
+{% block head %}
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+{% endblock %}
+
 {% block content %}
 <section class="text-center container">
     <div class="row">
       <div class="col-lg-6 col-md-8 mx-auto">
 
 {% if form.errors %}
+{% if form.hcaptcha.errors %}
+    <p>Please verify hcaptcha!</p>
+    {% else %}
 <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
 {% endif %}
 
 {% if next %}
@@ -31,6 +39,7 @@
       <label for="floatingPassword">{{ form.password.label_tag }}</label>
     </div>
 
+    <div class="h-captcha" data-sitekey="{{ hcaptcha_sitekey }}"></div>
     <button class="w-100 btn btn-lg btn-primary mb-2" type="submit" value="login">Sign in</button>
     <input type="hidden" name="next" value="{{ next }}">
   </form>
