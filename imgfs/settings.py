@@ -46,9 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'easy_thumbnails',
     'customauth',
     'backend',
-    'easy_thumbnails',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -165,3 +166,6 @@ CACHES = {
         "LOCATION": "/var/tmp/django_cache",
     }
 }
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
