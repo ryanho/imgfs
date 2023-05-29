@@ -13,6 +13,7 @@ class ImageListView(LoginRequiredMixin, ListView):
     extra_context = {
         'gateway': settings.IPFS_GATEWAY
     }
+    ordering = ['-created']
 
     def get_queryset(self):
         queryset = super().get_queryset()
