@@ -13,3 +13,7 @@ class ImageListView(LoginRequiredMixin, ListView):
     extra_context = {
         'gateway': settings.IPFS_GATEWAY
     }
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.prefetch_related('thumbnailimage')
