@@ -1,0 +1,53 @@
+<nav aria-label="選擇頁數">
+  <ul class="pagination justify-content-center">
+{#      <li class="page-item"><span class="page-link disabled" tabindex="-1" aria-disabled="true">選擇頁數</span></li>#}
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if querystring %}&amp;{{ querystring }}{% endif %}" aria-label="上一頁">
+            <span aria-hidden="true">&laquo;</span>
+        </a>
+    </li>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        <!-- Active page -->
+        {% if num == page_obj.number %}
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">{{ num }}</span>
+            </li>
+
+        {% else %}
+            <li class="page-item">
+                <!-- For the 1st page we do not use ?page=1 -->
+                {% if num == 1 %}
+                    <a class="page-link" href="?page=1{% if querystring %}&amp;{{ querystring }}{% endif %}">{{ num }}</a>
+
+                {% else %}
+                    <!-- Show current page and +-3 pages -->
+                    {% if num|add:"-2" <= page_obj.number and page_obj.number <= num|add:"2" %}
+                        <a class="page-link" href="?page={{ num }}{% if querystring %}&amp;{{ querystring }}{% endif %}">{{ num }}</a>
+
+                    {% elif num|add:"-4" == page_obj.number or page_obj.number == num|add:"4" %}
+                    <li class="page-item me-2">
+                        <span class="page-link">...</span>
+                    </li>
+
+                    <!-- Shows every 10th page and the last page -->
+                    {% elif num == page_obj.paginator.num_pages %}
+                        <a class="page-link" href="?page={{ num }}{% if querystring %}&amp;{{ querystring }}{% endif %}">{{ num }}</a>
+                    {% endif %}
+
+                {% endif %}
+            </li>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+    <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if querystring %}&amp;{{ querystring }}{% endif %}" aria-label="下一頁">
+            <span aria-hidden="true">&raquo;</span>
+        </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
