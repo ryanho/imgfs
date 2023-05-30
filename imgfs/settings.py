@@ -17,7 +17,9 @@ import os
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
-    DEFAULT_FROM_EMAIL=(str, 'webmaster@localhost')
+    DEFAULT_FROM_EMAIL=(str, 'webmaster@localhost'),
+    EMAIL_HOST=(str, 'localhost'),
+    EMAIL_PORT=(int, 2525),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -151,12 +153,8 @@ if DEBUG:
     ]
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 else:
-    EMAIL_CONFIG = env.email(
-        'EMAIL_URL',
-        default=env.email_url('EMAIL_URL')
-    )
-
-    vars().update()
+    EMAIL_HOST = env.str('EMAIL_HOST')
+    EMAIL_PORT = env('EMAIL_PORT')
 
 
 IPFS_GATEWAY = env('IPFS_GATEWAY')
