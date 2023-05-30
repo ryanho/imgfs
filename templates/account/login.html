@@ -1,4 +1,6 @@
 {% extends "backend/base.html" %}
+{% load i18n %}
+{% load account socialaccount %}
 
 {% block head %}
     <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
@@ -26,13 +28,13 @@
     {% endif %}
 {% endif %}
 
-  <form method="post" action="{% url 'login' %}">
+  <form method="post" class="mb-3">
       {% csrf_token %}
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <h1 class="h3 mb-3 fw-normal">{% trans "Sign In" %}</h1>
 
     <div class="form-floating mb-2">
-      <input type="text" class="form-control" id="floatingInput" name="username" placeholder="username">
-      <label for="floatingInput">{{ form.username.label_tag }}</label>
+      <input type="text" class="form-control" id="floatingInput" name="login" placeholder="username">
+      <label for="floatingInput">{{ form.login.label_tag }}</label>
     </div>
     <div class="form-floating mb-2">
       <input type="password" class="form-control" name="password" autocomplete="current-password" required id="floatingPassword" placeholder="password">
@@ -40,12 +42,17 @@
     </div>
 
     <div class="h-captcha" data-sitekey="{{ hcaptcha_sitekey }}"></div>
-    <button class="w-100 btn btn-lg btn-primary mb-2" type="submit" value="login">Sign in</button>
+
+    <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label>
+    </div>
+    <button class="w-100 btn btn-lg btn-primary mb-2" type="submit" value="login">{% trans "Sign In" %}</button>
     <input type="hidden" name="next" value="{{ next }}">
   </form>
 
-{# Assumes you set up the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+<p><a href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a> / <a href="{% url 'account_signup' %}">{% trans "Signup" %}</a></p>
       </div>
     </div>
 </section>

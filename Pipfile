@@ -10,6 +10,7 @@ django-environ = "*"
 httpx = "*"
 gunicorn = "*"
 easy-thumbnails = "*"
+django-allauth = "*"
 
 [dev-packages]
 

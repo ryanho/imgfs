@@ -1,0 +1,51 @@
+{% extends "backend/base.html" %}
+{% load i18n %}
+
+{% block head %}
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+{% endblock %}
+
+{% block content %}
+<section class="text-center container">
+    <div class="row">
+      <div class="col-lg-6 col-md-8 mx-auto">
+
+{% if form.errors %}
+    <p>{{ form.errors }}</p>
+{% endif %}
+
+
+  <form method="post" class="mb-4">
+      {% csrf_token %}
+    <h1 class="h3 mb-3 fw-normal">{% trans "Sign Up" %}</h1>
+
+    <div class="form-floating mb-2">
+      <input type="text" class="form-control" id="username" name="username" autocomplete="username" placeholder="username">
+      <label for="username">{{ form.username.label_tag }}</label>
+        <small>{{ form.username.help_text }}</small>
+    </div>
+    <div class="form-floating mb-2">
+      <input type="email" class="form-control" id="email" name="email" autocomplete="email" placeholder="email address">
+      <label for="email">{{ form.email.label_tag }}</label>
+        <small>{{ form.email.help_text }}</small>
+    </div>
+    <div class="form-floating mb-2">
+      <input type="password" class="form-control" name="password1" autocomplete="new-password" required id="password1" placeholder="password">
+      <label for="password1">{{ form.password1.label_tag }}</label>
+    </div>
+    <div class="form-floating mb-2">
+      <input type="password" class="form-control" name="password2" autocomplete="new-password" required id="password2" placeholder="confirm password">
+      <label for="password2">{{ form.password2.label_tag }}</label>
+    </div>
+
+    <div class="h-captcha" data-sitekey="{{ hcaptcha_sitekey }}"></div>
+    <button class="w-100 btn btn-lg btn-primary mb-2" type="submit" value="login">{% trans "Sign Up" %} &raquo;</button>
+    <input type="hidden" name="next" value="{{ next }}">
+  </form>
+
+
+<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+      </div>
+    </div>
+</section>
+{% endblock %}

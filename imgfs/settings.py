@@ -16,7 +16,8 @@ import os
 
 env = environ.Env(
     # set casting, default value
-    DEBUG=(bool, False)
+    DEBUG=(bool, False),
+    DEFAULT_FROM_EMAIL=(str, 'webmaster@localhost')
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,9 +46,13 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
     'debug_toolbar',
     'easy_thumbnails',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'customauth',
     'backend',
     'dashboard',
@@ -69,8 +74,7 @@ ROOT_URLCONF = 'imgfs.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'backend.context_processors.site_settings',
             ],
         },
     },
@@ -144,6 +149,14 @@ if DEBUG:
         "127.0.0.1",
         # ...
     ]
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+else:
+    EMAIL_CONFIG = env.email(
+        'EMAIL_URL',
+        default=env.email_url('EMAIL_URL')
+    )
+
+    vars().update()
 
 
 IPFS_GATEWAY = env('IPFS_GATEWAY')
@@ -182,3 +195,18 @@ LOGGING = {
         "level": "WARNING",
     },
 }
+
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = None
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')

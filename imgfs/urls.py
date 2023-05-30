@@ -16,14 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from customauth.views import CustomLoginView, CustomLogoutView, CustomPasswordResetView
+from customauth.views import CustomLoginView, CustomSignupView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('__debug__/', include('debug_toolbar.urls')),
     path('', include('backend.urls')),
     path('dashboard/', include('dashboard.urls')),
-    path('accounts/login/', CustomLoginView.as_view(), name='login'),
-    path('accounts/logout/', CustomLogoutView.as_view(), name='logout'),
-    path('accounts/password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
+    path('accounts/login/', CustomLoginView.as_view(), name='account_login'),
+    path('accounts/signup/', CustomSignupView.as_view(), name='account_signup'),
+    path('accounts/', include('allauth.urls')),
 ]
