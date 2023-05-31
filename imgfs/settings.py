@@ -152,6 +152,7 @@ if DEBUG:
         # ...
     ]
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    ACCOUNT_LOGIN_ATTEMPTS_LIMIT = None
 else:
     EMAIL_HOST = env.str('EMAIL_HOST')
     EMAIL_PORT = env('EMAIL_PORT')
@@ -192,6 +193,13 @@ LOGGING = {
         "handlers": ["console"],
         "level": "WARNING",
     },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
 }
 
 
@@ -206,6 +214,5 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_LOGIN_ATTEMPTS_LIMIT = None
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
