@@ -49,7 +49,7 @@ class HomeView(FormView):
 
         img_file = form.files['image_file']
         thumbnailer = Thumbnailer(img_file)
-        thumbnail = thumbnailer.generate_thumbnail({'size': (540, 540), 'crop': True})
+        thumbnail = thumbnailer.generate_thumbnail({'size': (540, 540)})
 
         result = self.upload_file(img_file)
         cid = result['Hash']
