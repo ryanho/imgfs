@@ -88,6 +88,7 @@ class ShowImageView(TemplateView):
 
 
 def get_image(request, cid, filename):
+    image = get_object_or_404(UploadImage, cid=cid)
     gateway = settings.IPFS_GATEWAY
     res = httpx.get(f'{gateway}/ipfs/{cid}?filename={filename}', timeout=60)
 
@@ -97,6 +98,6 @@ def get_image(request, cid, filename):
     }
 
     if res.status_code == 200:
-        return HttpResponse(res.read(), content_type=res.headers.get('Content-Type'), headers=headers)
+        return HttpResponse(res.read(), content_type=image.content_type, headers=headers)
     else:
         return HttpResponse(res.content, status=res.status_code)
