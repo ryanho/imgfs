@@ -21,7 +21,6 @@ class HCaptchaField(forms.Field):
 
 
 class ImageUploadForm(forms.Form):
-    hcaptcha = HCaptchaField()
     image_file = forms.ImageField(
         label='Image File',
         widget=forms.FileInput(
@@ -31,3 +30,7 @@ class ImageUploadForm(forms.Form):
             }
         )
     )
+
+
+class GuestImageUploadForm(ImageUploadForm):
+    hcaptcha = HCaptchaField()

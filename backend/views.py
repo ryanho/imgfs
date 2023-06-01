@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect, reverse, get_object
 from django.views.generic import TemplateView, FormView
 from django.conf import settings
 import httpx
-from .forms import ImageUploadForm
+from .forms import ImageUploadForm, GuestImageUploadForm
 import json
 from easy_thumbnails.files import Thumbnailer
 from .models import UploadImage, ThumbnailImage
@@ -13,7 +13,13 @@ from customauth.models import User
 
 class HomeView(FormView):
     template_name = 'backend/home.html'
-    form_class = ImageUploadForm
+    form_class = GuestImageUploadForm
+
+    def get_form_class(self):
+        if self.request.user.is_authenticated:
+            return ImageUploadForm
+        else:
+            return super().get_form_class()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
