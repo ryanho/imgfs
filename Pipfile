@@ -11,6 +11,7 @@ httpx = "*"
 gunicorn = "*"
 easy-thumbnails = "*"
 django-allauth = "*"
+django-htmx = "*"
 
 [dev-packages]
 

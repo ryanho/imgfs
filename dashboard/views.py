@@ -14,8 +14,13 @@ class ImageListView(LoginRequiredMixin, ListView):
         'gateway': settings.IPFS_GATEWAY
     }
     ordering = ['-created']
-    paginate_by = 9
+    paginate_by = 1
 
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.prefetch_related('thumbnailimage')
+
+    def get(self, request, *args, **kwargs):
+        if request.htmx:
+            self.template_name = 'dashboard/components/_partial_image_list.html'
+        return super().get(request, *args, **kwargs)
