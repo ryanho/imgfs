@@ -14,7 +14,7 @@ class ImageListView(LoginRequiredMixin, ListView):
         'gateway': settings.IPFS_GATEWAY
     }
     ordering = ['-created']
-    paginate_by = 1
+    paginate_by = 9
 
     def get_queryset(self):
         queryset = super().get_queryset()
