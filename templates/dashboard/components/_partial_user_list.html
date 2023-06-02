@@ -1,0 +1,24 @@
+<div id="main">
+{% include 'dashboard/components/pagination.html' %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">name</th>
+            <th scope="col">is active</th>
+            <th scope="col">last login</th>
+            <th scope="col">action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in object_list %}
+        <tr>
+            <th scope="row">{{ obj.username }}</th>
+            <td>{{ obj.is_active }}</td>
+            <td>{{ obj.last_login }}</td>
+            <td></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% include 'dashboard/components/pagination.html' %}
+</div>

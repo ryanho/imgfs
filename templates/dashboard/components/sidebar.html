@@ -1,0 +1,16 @@
+{% load i18n %}
+<div class="position-sticky" style="top: 2rem;" hx-target="#main" hx-swap="outerHTML" hx-push-url="true">
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a class="nav-link" hx-get="{% url 'ImageListView'  %}" href="{% url 'ImageListView'  %}">{% trans 'Image list' %}</a>
+        </li>
+    </ul>
+    {% if user.is_staff %}
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a class="nav-link" hx-get="{% url 'UserListView' %}" href="{% url 'UserListView' %}">{% trans 'User' %}</a>
+        </li>
+    </ul>
+    {% endif %}
+</div>

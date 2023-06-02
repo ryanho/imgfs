@@ -3,6 +3,7 @@ from django.views.generic import ListView
 from backend.models import UploadImage, ThumbnailImage
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from customauth.models import User
 
 # Create your views here.
 
@@ -23,4 +24,15 @@ class ImageListView(LoginRequiredMixin, ListView):
     def get(self, request, *args, **kwargs):
         if request.htmx:
             self.template_name = 'dashboard/components/_partial_image_list.html'
+        return super().get(request, *args, **kwargs)
+
+
+class UserListView(ListView):
+    model = User
+    template_name = 'dashboard/user_list.html'
+    paginate_by = 10
+
+    def get(self, request, *args, **kwargs):
+        if request.htmx:
+            self.template_name = 'dashboard/components/_partial_user_list.html'
         return super().get(request, *args, **kwargs)
