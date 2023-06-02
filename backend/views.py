@@ -6,7 +6,6 @@ from .forms import ImageUploadForm, GuestImageUploadForm
 import json
 from easy_thumbnails.files import Thumbnailer
 from .models import UploadImage, ThumbnailImage
-from customauth.models import User
 
 # Create your views here.
 
@@ -65,15 +64,19 @@ class HomeView(FormView):
         image, created = UploadImage.objects.get_or_create(
             cid=cid,
             defaults={
-                'user': user, 'filename': img_file.name, 'width': img_file.image.width, 'height': img_file.image.height,
+                'filename': img_file.name, 'width': img_file.image.width, 'height': img_file.image.height,
                 'size': result['Size'], 'content_type': img_file.image.get_format_mimetype()
             }
         )
 
         if created:
+            if user not in image.user.all():
+                image.user.add(user)
             return redirect(
                 reverse('ShowImageView', kwargs={'cid': cid})
             )
+        else:
+            image.user.add(user)
 
         thumbnailer = Thumbnailer(img_file)
         thumbnail = thumbnailer.generate_thumbnail({'size': (540, 540)})

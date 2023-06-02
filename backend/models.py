@@ -19,7 +19,7 @@ class AbstractImageModel(models.Model):
 
 
 class UploadImage(AbstractImageModel):
-    user = models.ForeignKey(User, verbose_name='user', null=True, blank=True, on_delete=models.CASCADE)
+    user = models.ManyToManyField(User, verbose_name='user', blank=True)
 
     class Meta:
         verbose_name = 'Upload image'
