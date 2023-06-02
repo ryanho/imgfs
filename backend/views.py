@@ -20,11 +20,6 @@ class HomeView(FormView):
             self.template_name = 'backend/components/_partial_home.html'
         return super().get(request, *args, **kwargs)
 
-    def form_invalid(self, form):
-        if self.request.htmx:
-            self.template_name = 'backend/components/_partial_home.html'
-        return super().form_invalid(form)
-
     def get_form_class(self):
         if self.request.user.is_authenticated:
             return ImageUploadForm

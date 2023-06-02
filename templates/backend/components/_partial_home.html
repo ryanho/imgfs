@@ -2,9 +2,9 @@
   <main id="main">
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
-      <div class="col-lg-6 col-md-8 mx-auto" hx-target="#main" hx-swap="outerHTML" hx-push-url="true">
+      <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">{% trans 'Upload image' %}</h1>
-        <form hx-encoding='multipart/form-data' hx-post=''>
+        <form enctype='multipart/form-data' method="post">
         {% csrf_token %}
         <div class="mb-3 py-2">
             {{ form.image_file }}
