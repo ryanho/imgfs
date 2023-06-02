@@ -1,0 +1,31 @@
+        <main id="main">
+            <div class="row g-5">
+                <div class="col-md-8">
+                    <a href="{{ imgurl }}" data-toggle="lightbox">
+                    <img src="{{ file_url }}" class="img-fluid rounded mx-auto d-block" title="click to enlarge image" width="{{ image.thumbnailimage.width }}" height="{{ image.thumbnailimage.height }}">
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                    <ul class="nav flex-column">
+                      <li class="nav-item">
+                        <a class="nav-link" href="#">Page url</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="https://cloudflare-ipfs.com/ipfs/{{ image.cid }}?filename={{ image.filename }}">IPFS url</a>
+                      </li>
+                      <li class="nav-item">
+                        {% if imgurl is None %}
+                        <a class="nav-link disabled">Image url</a>
+                        {% else %}
+                        <a class="nav-link" href="{{ imgurl }}">Image url</a>
+                        {% endif %}
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled">Share to...</a>
+                      </li>
+                    </ul>
+                    </div>
+                </div>
+            </div>
+        </main>

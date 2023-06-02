@@ -92,6 +92,11 @@ class ShowImageView(TemplateView):
         context['image'] = image
         return context
 
+    def get(self, request, *args, **kwargs):
+        if request.htmx:
+            self.template_name = 'backend/components/_partial_show_image.html'
+        return super().get(request, *args, **kwargs)
+
 
 def get_image(request, cid, filename):
     image = get_object_or_404(UploadImage, cid=cid)

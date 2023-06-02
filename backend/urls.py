@@ -4,6 +4,6 @@ from django.views.decorators.cache import cache_page
 
 urlpatterns = [
     path('', HomeView.as_view(), name='HomeView'),
-    path('<str:cid>', cache_page(60 * 60)(ShowImageView.as_view()), name='ShowImageView'),
+    path('<str:cid>', ShowImageView.as_view(), name='ShowImageView'),
     path('<str:cid>/<str:filename>', get_image, name='GetImage'),
 ]

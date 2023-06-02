@@ -1,10 +1,10 @@
     <main id="main">
     <div class="row">{% include 'dashboard/components/pagination.html' %}</div>
-    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center" hx-target="#main" hx-swap="outerHTML" hx-push-url="true">
       {% for obj in object_list %}
       <div class="col">
         <div class="card mb-4 rounded-3 shadow-sm">
-          <a href="{% url 'ShowImageView' obj.cid %}">
+          <a hx-get="{% url 'ShowImageView' obj.cid %}" href="{% url 'ShowImageView' obj.cid %}">
           <img class="card-img-top img-thumbnail" src="{{ gateway }}/ipfs/{{ obj.thumbnailimage.cid }}" alt="" style="height: 388px; object-fit: cover;">
           </a>
           <div class="card-body">
