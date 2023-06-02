@@ -69,7 +69,7 @@ class HomeView(FormView):
             }
         )
 
-        if created:
+        if not created:
             if user not in image.user.all():
                 image.user.add(user)
             return redirect(
