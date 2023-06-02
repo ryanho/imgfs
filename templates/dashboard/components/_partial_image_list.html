@@ -15,4 +15,26 @@
       {% endfor %}
     </div>
     <div class="row">{% include 'dashboard/components/pagination.html' %}</div>
+
+<div class="modal fade" id="confirmDelete" tabindex="-1" aria-labelledby="confirmDeleteDialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete image</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure to delete this image?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <form method="post" action="">
+              {% csrf_token %}
+              <input type="hidden" name="cid" value="">
+        <button type="button" class="btn btn-primary">Confirm</button>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
     </main>
