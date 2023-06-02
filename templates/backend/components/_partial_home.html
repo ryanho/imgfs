@@ -1,0 +1,21 @@
+{% load i18n %}
+  <main id="main">
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto" hx-target="#main" hx-swap="outerHTML" hx-push-url="true">
+        <h1 class="fw-light">{% trans 'Upload image' %}</h1>
+        <form hx-encoding='multipart/form-data' hx-post=''>
+        {% csrf_token %}
+        <div class="mb-3 py-2">
+            {{ form.image_file }}
+        </div>
+        {% if not user.is_authenticated %}
+        <div class="h-captcha" data-sitekey="{{ hcaptcha_sitekey }}"></div>
+        {% endif %}
+        {{ form.errors }}
+        <button type="submit" class="btn btn-primary">{% trans 'Submit' %}</button>
+        </form>
+      </div>
+    </div>
+  </section>
+  </main>
