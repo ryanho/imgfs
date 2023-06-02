@@ -64,18 +64,24 @@ class HomeView(FormView):
             user = None
 
         img_file = form.files['image_file']
-        thumbnailer = Thumbnailer(img_file)
-        thumbnail = thumbnailer.generate_thumbnail({'size': (540, 540)})
-
         result = self.upload_file(img_file)
         cid = result['Hash']
 
-        image = UploadImage(
-            user=user, cid=cid, filename=img_file.name, width=img_file.image.width,
-            height=img_file.image.height, size=result['Size'], content_type=img_file.image.get_format_mimetype()
+        image, created = UploadImage.objects.get_or_create(
+            cid=cid,
+            defaults={
+                'user': user, 'filename': img_file.name, 'width': img_file.image.width, 'height': img_file.image.height,
+                'size': result['Size'], 'content_type': img_file.image.get_format_mimetype()
+            }
         )
-        image.save()
 
+        if created:
+            return redirect(
+                reverse('ShowImageView', kwargs={'cid': cid})
+            )
+
+        thumbnailer = Thumbnailer(img_file)
+        thumbnail = thumbnailer.generate_thumbnail({'size': (540, 540)})
         result = self.upload_file(thumbnail)
 
         thumb_image = ThumbnailImage(
