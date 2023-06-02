@@ -1,0 +1,7 @@
+{% load i18n %}
+    <nav aria-label="breadcrumb" hx-target="#main" hx-swap="outerHTML" hx-push-url="true">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a hx-get="{% url 'HomeView' %}" href="{% url 'HomeView' %}">{% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item"><a hx-get="{% url 'ImageListView' %}" href="{% url 'ImageListView' %}">{% trans 'Image list' %}</a></li>
+      </ol>
+    </nav>

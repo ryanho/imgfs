@@ -1,4 +1,7 @@
         <main id="main">
+            {% if user.is_authenticated %}
+            <div class="d-flex flex-row-reverse p-2">{% include 'backend/components/breadcrumb.html' %}</div>
+            {% endif %}
             <div class="row g-5">
                 <div class="col-md-8">
                     <a href="{{ imgurl }}" data-toggle="lightbox">
