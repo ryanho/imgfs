@@ -3,3 +3,14 @@
 {% block main %}
 {% include 'dashboard/components/_partial_image_list.html' %}
 {% endblock %}
+
+{% block script %}
+    <script>
+    function showModal(url) {
+        const myModal = new bootstrap.Modal(document.querySelector('#confirmDelete'))
+        const form = document.querySelector('form[id=deleteForm]')
+        form.action = url
+        myModal.show()
+    }
+    </script>
+{% endblock %}

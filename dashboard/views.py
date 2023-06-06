@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DeleteView
 from backend.models import UploadImage, ThumbnailImage
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from customauth.models import User
 import httpx
+import logging
 
 # Create your views here.
 
@@ -30,24 +32,27 @@ class ImageListView(LoginRequiredMixin, ListView):
 
 class DeleteImageView(LoginRequiredMixin, DeleteView):
     model = UploadImage
+    success_url = reverse_lazy('ImageListView')
 
     def form_valid(self, form):
         api = settings.IPFS_API + '/api/v0'
-        with httpx.Client as client:
+        with httpx.Client() as client:
             # delete thumbnail
-            url = f'{api}/api/v0/pin/rm?arg={self.object.thumbnailimage.cid}'
+            url = f'{api}/pin/rm?arg={self.object.thumbnailimage.cid}'
             res = client.post(url)
             if res.status_code == 200:
                 self.object.thumbnailimage.delete()
+                logging.info(f'delete thumbnail {self.object.thumbnailimage.cid}')
 
             # delete image
-            url = f'{api}/api/v0/pin/rm?arg={self.object.cid}'
+            url = f'{api}/pin/rm?arg={self.object.cid}'
             res = client.post(url)
             if res.status_code == 200:
                 self.object.delete()
+                logging.info(f'delete image {self.object.cid}')
 
             # ipfs gc
-            url = f'{api}/api/v0/repo/gc'
+            url = f'{api}/repo/gc'
             res = client.post(url)
             if res.status_code == 200:
                 print(res.text)

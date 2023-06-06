@@ -8,7 +8,7 @@
           <img class="card-img-top img-thumbnail" src="{{ gateway }}/ipfs/{{ obj.thumbnailimage.cid }}" alt="" style="height: 388px; object-fit: cover;">
           </a>
           <div class="card-body">
-            <button type="button" class="w-100 btn btn-lg btn-outline-danger">Delete</button>
+            <button type="button" class="w-100 btn btn-lg btn-outline-danger" onclick="showModal('{% url "DeleteImageView" obj.cid %}')">Delete</button>
           </div>
         </div>
       </div>
@@ -28,10 +28,9 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <form method="post" action="">
+          <form id='deleteForm' method="post" action="">
               {% csrf_token %}
-              <input type="hidden" name="cid" value="">
-        <button type="button" class="btn btn-primary">Confirm</button>
+        <button type="submit" class="btn btn-primary">Confirm</button>
           </form>
       </div>
     </div>
